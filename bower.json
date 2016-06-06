@@ -1,0 +1,17 @@
+{
+  "name": "multivision",
+  "description": "Extreme Tech Training",
+  "main": "index.js",
+  "authors": [
+    "Tori Huang (From tutorial by Joe Eames)"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/torihuang/mean-stack-tutorial",
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "toastr": "^2.1.2",
+    "angular": "^1.5.6",
+    "angular-resource": "^1.5.6",
+    "angular-route": "^1.5.6"
+  }
+}
