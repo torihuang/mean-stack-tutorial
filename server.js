@@ -1,7 +1,8 @@
 var express = require('express'),
   stylus = require('stylus'),
   logger = require('morgan'),
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser'),
+  mongoose = require('mongoose');
 
 // Returns environment if it's been set by node
 var env = process.env.NODE_ENV || 'development';
@@ -27,6 +28,17 @@ app.use(stylus.middleware(
 ));
 
 app.use(express.static(__dirname + '/public'));
+
+// assigning localhost to host name and multivision to name of database to use
+// mongodb is creating this database if it does not already exist
+mongoose.connect('mongodb://localhost/multivision')
+
+// variable that references the mongoose connection
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error...'))
+db.once('open', function callback() {
+  console.log('multivision db opened, wahoo!')
+})
 
 app.get('/partials/:partialPath', function(req, res) {
   res.render('partials/' + req.params.partialPath);
