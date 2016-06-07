@@ -31,7 +31,11 @@ app.use(express.static(__dirname + '/public'));
 
 // assigning localhost to host name and multivision to name of database to use
 // mongodb is creating this database if it does not already exist
-mongoose.connect('mongodb://localhost/multivision')
+if (env == 'development') {
+  mongoose.connect('mongodb://localhost/multivision')
+} else {
+  mongoose.connect('mongodb://torihuang:multivision@ds025603.mlab.com:25603/multivision')
+}
 
 // variable that references the mongoose connection
 var db = mongoose.connection;
@@ -58,6 +62,6 @@ app.get('*', function(req, res) {
   res.render('index', {mongoMessage: mongoMessage});
 })
 
-var port = 8080;
+var port = process.env.PORT  || 8080;
 app.listen(port);
 console.log('Nihao from port ' + port + '...');
