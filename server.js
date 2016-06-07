@@ -1,48 +1,16 @@
 var express = require('express'),
-  stylus = require('stylus'),
-  logger = require('morgan'),
-  bodyParser = require('body-parser'),
   mongoose = require('mongoose');
 
 // Returns environment if it's been set by node
 var env = process.env.NODE_ENV || 'development';
 
 var app = express();
+var config = require('./server/config/config')[env];
 
-function compile(str, path) {
-  return stylus(str).set('filename', path);
-}
+require('./server/config/express') (app, config)
+require('./server/config/mongoose') (config)
+require('./server/config/routes') (app)
 
-app.set('views', __dirname + '/server/views');
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-
-app.use(stylus.middleware(
-  {
-    src: __dirname + '/public',
-    compile: compile
-  }
-));
-
-app.use(express.static(__dirname + '/public'));
-
-// assigning localhost to host name and multivision to name of database to use
-// mongodb is creating this database if it does not already exist
-if (env == 'development') {
-  mongoose.connect('mongodb://localhost/multivision')
-} else {
-  mongoose.connect('mongodb://torihuang:multivision@ds025603.mlab.com:25603/multivision')
-}
-
-// variable that references the mongoose connection
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error...'))
-db.once('open', function callback() {
-  console.log('multivision db opened, wahoo!')
-})
 
 // REMOVE LATER
 // var messageSchema = mongoose.Schema({message: String});
@@ -52,16 +20,7 @@ db.once('open', function callback() {
 //   mongoMessage = messageDoc.message;
 // });
 
-app.get('/partials/*', function(req, res) {
-  res.render('../../public/app/' + req.params[0]);
-})
 
-// ALL requests go through star route
-// req = request, res = response
-app.get('*', function(req, res) {
-  res.render('index');
-})
 
-var port = process.env.PORT  || 8080;
-app.listen(port);
-console.log('Nihao from port ' + port + '...');
+app.listen(config.port);
+console.log('Nihao from port ' + config.port + '...');
