@@ -19,7 +19,8 @@ var userSchema = mongoose.Schema({
   lastName: String,
   username: String,
   salt: String,
-  hashed_pwd: String
+  hashed_pwd: String,
+  roles: [String]
 });
 userSchema.methods = {
   authenticate: function(passwordToMatch) {
@@ -34,11 +35,11 @@ User.find({}).exec(function(err, collection) {
 
     salt = createSalt();
     hash = hashPwd(salt, 'password');
-    User.create({firstName:'Matt',lastName:'Brauer',username:'mattbrauer', salt: salt, hashed_pwd: hash});
+    User.create({firstName:'Matt',lastName:'Brauer',username:'mattbrauer', salt: salt, hashed_pwd: hash, roles:['admin']});
 
     salt = createSalt();
     hash = hashPwd(salt, 'password');
-    User.create({firstName:'Tori',lastName:'Huang',username:'torihuang', salt: salt, hashed_pwd: hash});
+    User.create({firstName:'Tori',lastName:'Huang',username:'torihuang', salt: salt, hashed_pwd: hash, roles:[]});
 
     salt = createSalt();
     hash = hashPwd(salt, 'password');
