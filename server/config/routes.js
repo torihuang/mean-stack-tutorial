@@ -7,11 +7,15 @@ module.exports = function(app) {
 
   // Using passport in an unusual way, because we are not logging in with server side route
   // we are logging in using an xhr post
-  app.post('/login', auth.authenticate)
+  app.post('/login', auth.authenticate);
+  app.post('/logout', function(req, res) {
+    req.logout();
+    res.end();
+  });
 
   // ALL requests go through star route
   // req = request, res = response
   app.get('*', function(req, res) {
-    res.render('index');
+    res.render('index', {bootstrappedUser: req.user});
   })
 }
